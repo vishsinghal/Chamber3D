@@ -1,0 +1,71 @@
+[gd_scene load_steps=8 format=3 uid="uid://d9m4v1x7q3k5c"]
+
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_script"]
+[ext_resource type="Material" uid="uid://f9y6c3v1z7k4d" path="res://materials/enemy_mat.tres" id="2_mat"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1"]
+radius = 0.65
+
+[sub_resource type="SphereMesh" id="SphereMesh_core"]
+material = ExtResource("2_mat")
+radius = 0.45
+height = 0.9
+
+[sub_resource type="TorusMesh" id="TorusMesh_ring1"]
+material = ExtResource("2_mat")
+inner_radius = 0.6
+outer_radius = 0.75
+
+[sub_resource type="TorusMesh" id="TorusMesh_ring2"]
+material = ExtResource("2_mat")
+inner_radius = 0.85
+outer_radius = 0.95
+
+[sub_resource type="Curve" id="Curve_death"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Enemy" type="CharacterBody3D" groups=["enemies"]]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_script")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("SphereShape3D_1")
+
+[node name="MeshRoot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+
+[node name="CoreMesh" type="MeshInstance3D" parent="MeshRoot"]
+mesh = SubResource("SphereMesh_core")
+
+[node name="RingInner" type="MeshInstance3D" parent="MeshRoot"]
+mesh = SubResource("TorusMesh_ring1")
+
+[node name="RingOuter" type="MeshInstance3D" parent="MeshRoot"]
+mesh = SubResource("TorusMesh_ring2")
+
+[node name="EyeLight" type="OmniLight3D" parent="MeshRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.4)
+light_color = Color(1, 0.2, 0.1, 1)
+light_energy = 2.5
+omni_range = 2.5
+
+[node name="DeathParticles" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+emitting = false
+amount = 32
+lifetime = 0.6
+one_shot = true
+explosiveness = 1.0
+emission_shape = 1
+emission_sphere_radius = 0.5
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_min = 4.0
+initial_velocity_max = 8.0
+scale_amount_min = 0.15
+scale_amount_max = 0.3
+scale_amount_curve = SubResource("Curve_death")
+color = Color(1, 0.3, 0.1, 1)

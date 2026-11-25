@@ -1,0 +1,80 @@
+name: Build iOS IPA & Xcode Project (Godot 4)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  GODOT_VERSION: "4.3"
+  GODOT_RELEASE: "stable"
+
+jobs:
+  build-ios:
+    runs-on: macos-14
+    name: 🍎 Build iOS Xcode & IPA
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Select Xcode Version
+        run: |
+          sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
+          xcodebuild -version
+
+      - name: Download Godot macOS & Export Templates
+        run: |
+          mkdir -p ~/Library/Application\ Support/Godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}
+          mkdir -p ~/godot_bin
+          
+          echo "Downloading Godot ${GODOT_VERSION} for macOS..."
+          curl -sSL "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_macos.universal.zip" -o godot_mac.zip
+          unzip -q godot_mac.zip -d /tmp/godot
+          mv /tmp/godot/Godot.app/Contents/MacOS/Godot ~/godot_bin/godot
+          chmod +x ~/godot_bin/godot
+          echo "$HOME/godot_bin" >> $GITHUB_PATH
+          
+          echo "Downloading Godot Export Templates..."
+          curl -sSL "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_export_templates.tpz" -o templates.tpz
+          unzip -q templates.tpz -d /tmp/templates
+          mv /tmp/templates/templates/* ~/Library/Application\ Support/Godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}/
+          rm -rf templates.tpz /tmp/templates godot_mac.zip /tmp/godot
+
+      - name: Export iOS Xcode Project
+        run: |
+          mkdir -p ios_build
+          godot --headless --export-debug "iOS" ios_build/Chamber.xcodeproj
+
+      - name: Build Xcode Archive (Simulator / Development)
+        run: |
+          cd ios_build
+          xcodebuild -project Chamber.xcodeproj \
+            -scheme Chamber \
+            -configuration Debug \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            build
+
+      - name: Package Unsigned Payload / IPA
+        run: |
+          mkdir -p ios_build/build/Release-iphoneos/Payload
+          cp -r ios_build/build/Release-iphoneos/Chamber.app ios_build/build/Release-iphoneos/Payload/ 2>/dev/null || true
+          if [ -d "ios_build/build/Debug-iphoneos/Chamber.app" ]; then
+            mkdir -p ios_build/build/Payload
+            cp -r ios_build/build/Debug-iphoneos/Chamber.app ios_build/build/Payload/
+            cd ios_build/build
+            zip -rq Chamber-Unsigned.ipa Payload
+          fi
+
+      - name: Upload Xcode Project & Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Chamber-iOS-Artifacts
+          path: |
+            ios_build/build/Chamber-Unsigned.ipa
+            ios_build/Chamber.xcodeproj
+          retention-days: 14

@@ -1,0 +1,31 @@
+# Godot 4 .gitignore
+.godot/
+*.translation
+
+# Mono / C# specific (if ever added)
+.mono/
+[Bb]in/
+[Oo]bj/
+
+# OS generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build Artifacts
+export/
+build/
+android_build/
+ios_build/
+*.apk
+*.aab
+*.ipa
+*.zip
+*.keystore
+*.mobileprovision
+*.p12
+*.cer

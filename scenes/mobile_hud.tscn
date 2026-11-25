@@ -1,0 +1,244 @@
+[gd_scene load_steps=4 format=3 uid="uid://f4k8n2m7q5x1a"]
+
+[ext_resource type="Script" path="res://scripts/mobile_hud.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/virtual_joystick.gd" id="2_joystick_script"]
+[ext_resource type="Script" path="res://scripts/touch_look_zone.gd" id="3_look_script"]
+
+[node name="MobileHUD" type="CanvasLayer"]
+script = ExtResource("1_script")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TouchLookZone" type="Control" parent="Control"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("3_look_script")
+
+[node name="VirtualJoystick" type="Control" parent="Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = -280.0
+offset_right = 320.0
+offset_bottom = -40.0
+grow_vertical = 0
+mouse_filter = 1
+script = ExtResource("2_joystick_script")
+
+[node name="Base" type="ColorRect" parent="Control/VirtualJoystick"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -90.0
+offset_right = 90.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.15, 0.25, 0.4, 0.45)
+
+[node name="Tip" type="ColorRect" parent="Control/VirtualJoystick/Base"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -35.0
+offset_right = 35.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.2, 0.8, 1, 0.75)
+
+[node name="ActionButtons" type="Control" parent="Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -280.0
+offset_right = -40.0
+offset_bottom = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="FireButton" type="Button" parent="Control/ActionButtons"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -110.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "FIRE"
+
+[node name="DashButton" type="Button" parent="Control/ActionButtons"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -210.0
+offset_top = -80.0
+offset_right = -130.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "DASH"
+
+[node name="TopBar" type="HBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 20.0
+offset_right = -40.0
+offset_bottom = 70.0
+grow_horizontal = 2
+theme_override_constants/separation = 30
+
+[node name="HealthBar" type="ProgressBar" parent="Control/TopBar"]
+custom_minimum_size = Vector2(250, 30)
+layout_mode = 2
+size_flags_vertical = 4
+value = 100.0
+
+[node name="ScoreLabel" type="Label" parent="Control/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SCORE: 000000"
+vertical_alignment = 1
+
+[node name="WaveLabel" type="Label" parent="Control/TopBar"]
+layout_mode = 2
+text = "WAVE 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PauseButton" type="Button" parent="Control/TopBar"]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+text = "PAUSE"
+
+[node name="GameOverPanel" type="Panel" parent="Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -160.0
+offset_right = 220.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="Control/GameOverPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 25.0
+offset_bottom = 65.0
+grow_horizontal = 2
+text = "SYSTEM COMPROMISED"
+horizontal_alignment = 1
+
+[node name="FinalScoreLabel" type="Label" parent="Control/GameOverPanel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -30.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "FINAL SCORE: 0
+WAVES SURVIVED: 1"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="Control/GameOverPanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -90.0
+offset_top = -70.0
+offset_right = 90.0
+offset_bottom = -25.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "RESTART"
+
+[node name="PausePanel" type="Panel" parent="Control"]
+process_mode = 2
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -130.0
+offset_right = 180.0
+offset_bottom = 130.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseTitle" type="Label" parent="Control/PausePanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 30.0
+offset_bottom = 70.0
+grow_horizontal = 2
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="Control/PausePanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -65.0
+offset_right = 80.0
+offset_bottom = -25.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "RESUME"

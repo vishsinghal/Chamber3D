@@ -1,0 +1,100 @@
+[gd_scene load_steps=8 format=3 uid="uid://e1k8v5m3q9x2a"]
+
+[ext_resource type="Material" uid="uid://c8m3v9j4r1q2a" path="res://materials/floor_mat.tres" id="1_floor_mat"]
+[ext_resource type="Material" uid="uid://d1x8q7p6l2n9b" path="res://materials/wall_mat.tres" id="2_wall_mat"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(44, 1, 44)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+material = ExtResource("1_floor_mat")
+size = Vector3(44, 1, 44)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall"]
+size = Vector3(44, 6, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall"]
+material = ExtResource("2_wall_mat")
+size = Vector3(44, 6, 2)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pillar"]
+material = ExtResource("2_wall_mat")
+top_radius = 1.2
+bottom_radius = 1.4
+height = 6.0
+
+[node name="Arena" type="Node3D" groups=["environment"]]
+
+[node name="Floor" type="StaticBody3D" parent="." groups=["environment"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_floor")
+
+[node name="WallNorth" type="StaticBody3D" parent="." groups=["environment"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -22)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallNorth"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallNorth"]
+mesh = SubResource("BoxMesh_wall")
+
+[node name="WallSouth" type="StaticBody3D" parent="." groups=["environment"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 22)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallSouth"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallSouth"]
+mesh = SubResource("BoxMesh_wall")
+
+[node name="WallEast" type="StaticBody3D" parent="." groups=["environment"]]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 22, 2.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallEast"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallEast"]
+mesh = SubResource("BoxMesh_wall")
+
+[node name="WallWest" type="StaticBody3D" parent="." groups=["environment"]]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -22, 2.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallWest"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallWest"]
+mesh = SubResource("BoxMesh_wall")
+
+[node name="Pillars" type="Node3D" parent="."]
+
+[node name="Pillar1" type="StaticBody3D" parent="Pillars" groups=["environment"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 3, -10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pillars/Pillar1"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pillars/Pillar1"]
+mesh = SubResource("CylinderMesh_pillar")
+
+[node name="Pillar2" type="StaticBody3D" parent="Pillars" groups=["environment"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 3, -10)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pillars/Pillar2"]
+mesh = SubResource("CylinderMesh_pillar")
+
+[node name="Pillar3" type="StaticBody3D" parent="Pillars" groups=["environment"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 3, 10)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pillars/Pillar3"]
+mesh = SubResource("CylinderMesh_pillar")
+
+[node name="Pillar4" type="StaticBody3D" parent="Pillars" groups=["environment"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 3, 10)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pillars/Pillar4"]
+mesh = SubResource("CylinderMesh_pillar")

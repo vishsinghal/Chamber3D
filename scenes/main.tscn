@@ -1,0 +1,61 @@
+[gd_scene load_steps=9 format=3 uid="uid://b2m8q6v4l7x1c"]
+
+[ext_resource type="PackedScene" uid="uid://e1k8v5m3q9x2a" path="res://scenes/arena.tscn" id="1_arena"]
+[ext_resource type="PackedScene" uid="uid://c7k2v4m9n1x6b" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://scripts/camera_controller.gd" id="3_camera_script"]
+[ext_resource type="Script" path="res://scripts/enemy_spawner.gd" id="4_spawner_script"]
+[ext_resource type="PackedScene" uid="uid://f4k8n2m7q5x1a" path="res://scenes/mobile_hud.tscn" id="5_hud"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
+sky_top_color = Color(0.08, 0.12, 0.22, 1)
+sky_horizon_color = Color(0.15, 0.2, 0.32, 1)
+ground_bottom_color = Color(0.04, 0.05, 0.08, 1)
+ground_horizon_color = Color(0.12, 0.16, 0.25, 1)
+
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("ProceduralSkyMaterial_1")
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 2
+sky = SubResource("Sky_1")
+ambient_light_source = 3
+ambient_light_color = Color(0.25, 0.32, 0.45, 1)
+ambient_light_energy = 1.2
+tonemap_mode = 2
+glow_enabled = true
+glow_bloom = 0.18
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 15, 0)
+light_color = Color(0.9, 0.95, 1, 1)
+light_energy = 1.3
+shadow_enabled = true
+shadow_bias = 0.03
+
+[node name="Arena" parent="." instance=ExtResource("1_arena")]
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="CameraController" type="Node3D" parent="." groups=["camera_controller"]]
+script = ExtResource("3_camera_script")
+target_node = NodePath("../Player")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraController"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0)
+spring_length = 6.0
+margin = 0.2
+
+[node name="Camera3D" type="Camera3D" parent="CameraController/SpringArm3D"]
+current = true
+fov = 68.0
+
+[node name="EnemySpawner" type="Node3D" parent="."]
+script = ExtResource("4_spawner_script")
+
+[node name="MobileHUD" parent="." instance=ExtResource("5_hud")]
