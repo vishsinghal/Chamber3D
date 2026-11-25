@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://p4l9m2v7q1x8a"]
+
+[ext_resource type="Material" uid="uid://g1k9m3v7q5l6e" path="res://materials/palm_frond.tres" id="1_frond_mat"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_trunk"]
+albedo_color = Color(0.38, 0.32, 0.25, 1)
+roughness = 0.85
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_trunk"]
+material = SubResource("StandardMaterial3D_trunk")
+top_radius = 0.16
+bottom_radius = 0.22
+height = 4.8
+radial_segments = 8
+
+[sub_resource type="PrismMesh" id="PrismMesh_leaf"]
+material = ExtResource("1_frond_mat")
+size = Vector3(1.2, 0.15, 2.8)
+
+[node name="PalmTree" type="Node3D"]
+
+[node name="Trunk" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+mesh = SubResource("CylinderMesh_trunk")
+
+[node name="Canopy" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.7, 0)
+
+[node name="Leaf1" type="MeshInstance3D" parent="Canopy"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 0, 1.2)
+mesh = SubResource("PrismMesh_leaf")
+
+[node name="Leaf2" type="MeshInstance3D" parent="Canopy"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 0.866025, -0.5, 8.74228e-08, 0.5, 0.866025, 0, 0, -1.2)
+mesh = SubResource("PrismMesh_leaf")
+
+[node name="Leaf3" type="MeshInstance3D" parent="Canopy"]
+transform = Transform3D(-4.37114e-08, 0.5, 0.866025, 0, 0.866025, -0.5, -1, -2.18557e-08, -3.78552e-08, 1.2, 0, 0)
+mesh = SubResource("PrismMesh_leaf")
+
+[node name="Leaf4" type="MeshInstance3D" parent="Canopy"]
+transform = Transform3D(-4.37114e-08, -0.5, -0.866025, 0, 0.866025, -0.5, 1, -2.18557e-08, -3.78552e-08, -1.2, 0, 0)
+mesh = SubResource("PrismMesh_leaf")

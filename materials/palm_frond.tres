@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://g1k9m3v7q5l6e"]
+
+[resource]
+resource_name = "palm_frond"
+cull_mode = 2
+albedo_color = Color(0.16, 0.42, 0.12, 1)
+metallic = 0.05
+roughness = 0.5

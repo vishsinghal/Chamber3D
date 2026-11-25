@@ -9,7 +9,7 @@ config_version=5
 config/name="Chamber: Cyber Protocol"
 config/description="Fast-paced 3D mobile sci-fi arena game optimized for mobile devices."
 config/version="1.0.0"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/tower7_exterior.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"
 
@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 GameManager="*res://scripts/game_manager.gd"
 AudioController="*res://scripts/audio_synth.gd"
+MissionManager="*res://scripts/mission_manager.gd"
 
 [display]
 

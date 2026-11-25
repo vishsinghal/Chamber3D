@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://f1g8m4v2q9l3b"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pole"]
+albedo_color = Color(0.9, 0.92, 0.95, 1)
+metallic = 0.8
+roughness = 0.2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pole"]
+material = SubResource("StandardMaterial3D_pole")
+top_radius = 0.04
+bottom_radius = 0.06
+height = 8.0
+radial_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_flag"]
+cull_mode = 2
+albedo_color = Color(1, 0.45, 0.1, 1)
+roughness = 0.6
+
+[sub_resource type="QuadMesh" id="QuadMesh_flag"]
+material = SubResource("StandardMaterial3D_flag")
+size = Vector2(1.5, 0.9)
+
+[node name="Flagpole" type="Node3D"]
+
+[node name="Pole" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.0, 0)
+mesh = SubResource("CylinderMesh_pole")
+
+[node name="Flag" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 7.3, 0)
+mesh = SubResource("QuadMesh_flag")

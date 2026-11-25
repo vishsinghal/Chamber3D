@@ -1,0 +1,364 @@
+[gd_scene load_steps=29 format=3 uid="uid://b8x4q2m9l7k1a"]
+
+[ext_resource type="Material" uid="uid://c6j2v5m8q3x1a" path="res://materials/white_facade.tres" id="1_white"]
+[ext_resource type="Material" uid="uid://d7k3n8m1q4l2b" path="res://materials/blue_curtain_glass.tres" id="2_glass"]
+[ext_resource type="Material" uid="uid://e8m4v1x9q2k3c" path="res://materials/paved_plaza.tres" id="3_plaza"]
+[ext_resource type="Material" uid="uid://f9n2b7v4m1x5d" path="res://materials/lawn.tres" id="4_lawn"]
+[ext_resource type="PackedScene" uid="uid://p4l9m2v7q1x8a" path="res://scenes/palm_tree.tscn" id="5_palm"]
+[ext_resource type="PackedScene" uid="uid://f1g8m4v2q9l3b" path="res://scenes/flagpole.tscn" id="6_flag"]
+[ext_resource type="PackedScene" uid="uid://c7k2v4m9n1x6b" path="res://scenes/player.tscn" id="7_player"]
+[ext_resource type="PackedScene" uid="uid://f4k8n2m7q5x1a" path="res://scenes/mobile_hud.tscn" id="8_hud"]
+[ext_resource type="Script" path="res://scripts/camera_controller.gd" id="9_camera"]
+[ext_resource type="Script" path="res://scripts/building_entrance.gd" id="10_entrance"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+sky_top_color = Color(0.22, 0.55, 0.95, 1)
+sky_horizon_color = Color(0.65, 0.82, 0.98, 1)
+ground_bottom_color = Color(0.3, 0.35, 0.4, 1)
+ground_horizon_color = Color(0.65, 0.82, 0.98, 1)
+sun_angle_max = 30.0
+
+[sub_resource type="Sky" id="Sky_env"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_ext"]
+background_mode = 2
+sky = SubResource("Sky_env")
+ambient_light_source = 3
+ambient_light_color = Color(0.7, 0.8, 0.95, 1)
+ambient_light_energy = 0.9
+tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 0.3
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(140, 1, 100)
+
+[sub_resource type="BoxMesh" id="BoxMesh_plaza"]
+material = ExtResource("3_plaza")
+size = Vector3(140, 1, 100)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dome"]
+material = ExtResource("1_white")
+top_radius = 12.0
+bottom_radius = 12.5
+height = 11.0
+radial_segments = 32
+
+[sub_resource type="SphereMesh" id="SphereMesh_dome_cap"]
+material = ExtResource("1_white")
+radius = 12.0
+height = 12.0
+radial_segments = 32
+rings = 16
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tower"]
+material = ExtResource("1_white")
+top_radius = 3.6
+bottom_radius = 3.6
+height = 29.0
+radial_segments = 32
+
+[sub_resource type="BoxMesh" id="BoxMesh_wing"]
+material = ExtResource("2_glass")
+size = Vector3(32, 26, 24)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fin"]
+material = ExtResource("1_white")
+size = Vector3(0.35, 26, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_balcony"]
+material = ExtResource("1_white")
+size = Vector3(4.2, 0.3, 1.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_curved_glass"]
+material = ExtResource("2_glass")
+size = Vector3(7.5, 26, 0.4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_angled_strut"]
+material = ExtResource("1_white")
+top_radius = 0.4
+bottom_radius = 0.4
+height = 12.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_portal"]
+albedo_color = Color(0.08, 0.1, 0.12, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_portal"]
+material = SubResource("StandardMaterial3D_portal")
+size = Vector3(2.5, 3.8, 1.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_portal"]
+size = Vector3(4.0, 4.0, 3.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lawn"]
+material = ExtResource("4_lawn")
+size = Vector3(60, 0.4, 18)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_dome"]
+height = 12.0
+radius = 12.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wing_col"]
+size = Vector3(32, 26, 24)
+
+[node name="Tower7Exterior" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ext")
+
+[node name="SunLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819152, -0.40558, 0.397131, 0, 0.699663, 0.714473, -0.573576, -0.585257, 0.57312, 0, 40, 20)
+light_color = Color(1, 0.98, 0.94, 1)
+light_energy = 1.35
+shadow_enabled = true
+shadow_bias = 0.02
+
+[node name="GroundPlaza" type="StaticBody3D" parent="." groups=["environment"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 20)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundPlaza"]
+shape = SubResource("BoxShape3D_ground")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GroundPlaza"]
+mesh = SubResource("BoxMesh_plaza")
+
+[node name="LawnCurb" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0.2, 16)
+mesh = SubResource("BoxMesh_lawn")
+
+[node name="BuildingRoot" type="Node3D" parent="."]
+
+[node name="CentralDome" type="StaticBody3D" parent="BuildingRoot" groups=["environment"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BuildingRoot/CentralDome"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+shape = SubResource("CylinderShape3D_dome")
+
+[node name="DomeBase" type="MeshInstance3D" parent="BuildingRoot/CentralDome"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.6, 0, 5.5, 0)
+mesh = SubResource("CylinderMesh_dome")
+
+[node name="DomeCap" type="MeshInstance3D" parent="BuildingRoot/CentralDome"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.6, 0, 11, 0)
+mesh = SubResource("SphereMesh_dome_cap")
+
+[node name="EntrancePortal" type="MeshInstance3D" parent="BuildingRoot/CentralDome"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 1.9, 6.2)
+mesh = SubResource("BoxMesh_portal")
+
+[node name="EntranceTrigger" type="Area3D" parent="BuildingRoot/CentralDome"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 1.9, 7.5)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("10_entrance")
+
+[node name="TriggerCol" type="CollisionShape3D" parent="BuildingRoot/CentralDome/EntranceTrigger"]
+shape = SubResource("BoxShape3D_portal")
+
+[node name="LeftCylinderTower" type="MeshInstance3D" parent="BuildingRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.5, 14.5, -1)
+mesh = SubResource("CylinderMesh_tower")
+
+[node name="RightCylinderTower" type="MeshInstance3D" parent="BuildingRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 14.5, -1)
+mesh = SubResource("CylinderMesh_tower")
+
+[node name="RightRoofRailing" type="MeshInstance3D" parent="BuildingRoot/RightCylinderTower"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.5, 0)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="CurvedGlassFacade" type="Node3D" parent="BuildingRoot"]
+
+[node name="GlassSegment1" type="MeshInstance3D" parent="BuildingRoot/CurvedGlassFacade"]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -11, 13, -3)
+mesh = SubResource("BoxMesh_curved_glass")
+
+[node name="GlassSegment2" type="MeshInstance3D" parent="BuildingRoot/CurvedGlassFacade"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -4, 13, -5)
+mesh = SubResource("BoxMesh_curved_glass")
+
+[node name="GlassSegment3" type="MeshInstance3D" parent="BuildingRoot/CurvedGlassFacade"]
+transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 4, 13, -5)
+mesh = SubResource("BoxMesh_curved_glass")
+
+[node name="GlassSegment4" type="MeshInstance3D" parent="BuildingRoot/CurvedGlassFacade"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 11, 13, -3)
+mesh = SubResource("BoxMesh_curved_glass")
+
+[node name="CantileverBalconiesLeft" type="Node3D" parent="BuildingRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, -1)
+
+[node name="Balcony1" type="MeshInstance3D" parent="BuildingRoot/CantileverBalconiesLeft"]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, 7, 0)
+mesh = SubResource("BoxMesh_balcony")
+
+[node name="Balcony2" type="MeshInstance3D" parent="BuildingRoot/CantileverBalconiesLeft"]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, 11, 0)
+mesh = SubResource("BoxMesh_balcony")
+
+[node name="Balcony3" type="MeshInstance3D" parent="BuildingRoot/CantileverBalconiesLeft"]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, 15, 0)
+mesh = SubResource("BoxMesh_balcony")
+
+[node name="Balcony4" type="MeshInstance3D" parent="BuildingRoot/CantileverBalconiesLeft"]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, 19, 0)
+mesh = SubResource("BoxMesh_balcony")
+
+[node name="Balcony5" type="MeshInstance3D" parent="BuildingRoot/CantileverBalconiesLeft"]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, 23, 0)
+mesh = SubResource("BoxMesh_balcony")
+
+[node name="CantileverBalconiesRight" type="Node3D" parent="BuildingRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, -1)
+
+[node name="BalconyR1" type="MeshInstance3D" parent="BuildingRoot/CantileverBalconiesRight"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, 7, 0)
+mesh = SubResource("BoxMesh_balcony")
+
+[node name="BalconyR2" type="MeshInstance3D" parent="BuildingRoot/CantileverBalconiesRight"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, 11, 0)
+mesh = SubResource("BoxMesh_balcony")
+
+[node name="BalconyR3" type="MeshInstance3D" parent="BuildingRoot/CantileverBalconiesRight"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, 15, 0)
+mesh = SubResource("BoxMesh_balcony")
+
+[node name="BalconyR4" type="MeshInstance3D" parent="BuildingRoot/CantileverBalconiesRight"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, 19, 0)
+mesh = SubResource("BoxMesh_balcony")
+
+[node name="BalconyR5" type="MeshInstance3D" parent="BuildingRoot/CantileverBalconiesRight"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, 23, 0)
+mesh = SubResource("BoxMesh_balcony")
+
+[node name="WingA_Left" type="StaticBody3D" parent="BuildingRoot" groups=["environment"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33, 13, -12)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BuildingRoot/WingA_Left"]
+shape = SubResource("BoxShape3D_wing_col")
+
+[node name="Body" type="MeshInstance3D" parent="BuildingRoot/WingA_Left"]
+mesh = SubResource("BoxMesh_wing")
+
+[node name="Fin1" type="MeshInstance3D" parent="BuildingRoot/WingA_Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="Fin2" type="MeshInstance3D" parent="BuildingRoot/WingA_Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="Fin3" type="MeshInstance3D" parent="BuildingRoot/WingA_Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="Fin4" type="MeshInstance3D" parent="BuildingRoot/WingA_Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="Fin5" type="MeshInstance3D" parent="BuildingRoot/WingA_Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="Fin6" type="MeshInstance3D" parent="BuildingRoot/WingA_Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="Fin7" type="MeshInstance3D" parent="BuildingRoot/WingA_Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="EntranceDiagonalStrut1" type="MeshInstance3D" parent="BuildingRoot/WingA_Left"]
+transform = Transform3D(0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0, 1, 8, -8, 13)
+mesh = SubResource("CylinderMesh_angled_strut")
+
+[node name="EntranceDiagonalStrut2" type="MeshInstance3D" parent="BuildingRoot/WingA_Left"]
+transform = Transform3D(0.866025, -0.5, 0, 0.5, 0.866025, 0, 0, 0, 1, 13, -8, 13)
+mesh = SubResource("CylinderMesh_angled_strut")
+
+[node name="WingB_Right" type="StaticBody3D" parent="BuildingRoot" groups=["environment"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33, 13, -12)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BuildingRoot/WingB_Right"]
+shape = SubResource("BoxShape3D_wing_col")
+
+[node name="Body" type="MeshInstance3D" parent="BuildingRoot/WingB_Right"]
+mesh = SubResource("BoxMesh_wing")
+
+[node name="FinR1" type="MeshInstance3D" parent="BuildingRoot/WingB_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="FinR2" type="MeshInstance3D" parent="BuildingRoot/WingB_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="FinR3" type="MeshInstance3D" parent="BuildingRoot/WingB_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="FinR4" type="MeshInstance3D" parent="BuildingRoot/WingB_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="FinR5" type="MeshInstance3D" parent="BuildingRoot/WingB_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="FinR6" type="MeshInstance3D" parent="BuildingRoot/WingB_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="FinR7" type="MeshInstance3D" parent="BuildingRoot/WingB_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 12.3)
+mesh = SubResource("BoxMesh_fin")
+
+[node name="EnvironmentLandscaping" type="Node3D" parent="."]
+
+[node name="Palm1" parent="EnvironmentLandscaping" instance=ExtResource("5_palm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, 14)
+
+[node name="Palm2" parent="EnvironmentLandscaping" instance=ExtResource("5_palm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 15)
+
+[node name="Palm3" parent="EnvironmentLandscaping" instance=ExtResource("5_palm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15.5)
+
+[node name="Palm4" parent="EnvironmentLandscaping" instance=ExtResource("5_palm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 15)
+
+[node name="Palm5" parent="EnvironmentLandscaping" instance=ExtResource("5_palm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 14)
+
+[node name="Palm6" parent="EnvironmentLandscaping" instance=ExtResource("5_palm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23, 0, 12)
+
+[node name="Flagpole1" parent="EnvironmentLandscaping" instance=ExtResource("6_flag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, 12)
+
+[node name="Flagpole2" parent="EnvironmentLandscaping" instance=ExtResource("6_flag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.5)
+
+[node name="Flagpole3" parent="EnvironmentLandscaping" instance=ExtResource("6_flag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, 12)
+
+[node name="Player" parent="." instance=ExtResource("7_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32)
+
+[node name="CameraController" type="Node3D" parent="." groups=["camera_controller"]]
+script = ExtResource("9_camera")
+target_node = NodePath("../Player")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraController"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0)
+spring_length = 8.0
+margin = 0.2
+
+[node name="Camera3D" type="Camera3D" parent="CameraController/SpringArm3D"]
+current = true
+fov = 68.0
+
+[node name="MobileHUD" parent="." instance=ExtResource("8_hud")]

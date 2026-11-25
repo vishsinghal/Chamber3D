@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://d7k3n8m1q4l2b"]
+
+[resource]
+resource_name = "blue_curtain_glass"
+albedo_color = Color(0.12, 0.38, 0.68, 0.88)
+metallic = 0.92
+roughness = 0.06
+transparency = 1
+refraction_enabled = true
+refraction_scale = 0.02

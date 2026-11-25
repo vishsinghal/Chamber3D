@@ -1,5 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://b2m8q6v4l7x1c"]
 
+[ext_resource type="Script" path="res://scripts/main_level.gd" id="1_main_script"]
 [ext_resource type="PackedScene" uid="uid://e1k8v5m3q9x2a" path="res://scenes/arena.tscn" id="1_arena"]
 [ext_resource type="PackedScene" uid="uid://c7k2v4m9n1x6b" path="res://scenes/player.tscn" id="2_player"]
 [ext_resource type="Script" path="res://scripts/camera_controller.gd" id="3_camera_script"]
@@ -26,6 +27,7 @@ glow_enabled = true
 glow_bloom = 0.18
 
 [node name="Main" type="Node3D"]
+script = ExtResource("1_main_script")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_1")

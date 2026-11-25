@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://e8m4v1x9q2k3c"]
+
+[resource]
+resource_name = "paved_plaza"
+albedo_color = Color(0.72, 0.70, 0.66, 1)
+metallic = 0.1
+roughness = 0.75
+uv1_scale = Vector3(60, 60, 60)
